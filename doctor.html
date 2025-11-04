@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doctor Appointment Management Dashboard</title>
+    <title>Doctor Appointment Management System</title>
     <style>
         * {
             margin: 0;
@@ -25,46 +26,77 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--bg-light);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: var(--text-dark);
             line-height: 1.6;
+            min-height: 100vh;
         }
 
-        .dashboard {
+        /* Login Screen */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
             min-height: 100vh;
             padding: 20px;
         }
 
-        .dashboard-header {
+        .login-card {
             background: white;
-            padding: 25px 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            margin-bottom: 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
+            padding: 50px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
         }
 
-        .dashboard-header h1 {
+        .login-card h1 {
             color: var(--primary);
-            font-size: 2em;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 2.2em;
         }
 
-        .header-actions {
-            display: flex;
-            gap: 15px;
+        .login-card p {
+            color: var(--text-medium);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
 
         .btn {
-            padding: 12px 24px;
+            padding: 14px 28px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 1em;
             font-weight: 600;
             cursor: pointer;
@@ -72,11 +104,13 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            justify-content: center;
         }
 
         .btn-primary {
             background: var(--primary);
             color: white;
+            width: 100%;
         }
 
         .btn-primary:hover {
@@ -100,6 +134,59 @@
             color: white;
         }
 
+        /* Dashboard */
+        .dashboard {
+            display: none;
+            min-height: 100vh;
+            padding: 20px;
+            background: var(--bg-light);
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        .dashboard-header {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .dashboard-header h1 {
+            color: var(--primary);
+            font-size: 2em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-badge {
+            background: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
         .main-grid {
             display: grid;
             grid-template-columns: 350px 1fr;
@@ -110,7 +197,7 @@
             background: white;
             padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
         }
 
@@ -122,47 +209,6 @@
             padding-bottom: 10px;
         }
 
-        /* Checklist Styles */
-        .checklist {
-            max-height: 600px;
-            overflow-y: auto;
-        }
-
-        .checklist-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 12px;
-            background: var(--bg-light);
-            border-radius: 8px;
-            margin-bottom: 10px;
-            transition: all 0.2s;
-        }
-
-        .checklist-item:hover {
-            background: #e0e7ff;
-        }
-
-        .checklist-item input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-            margin-top: 2px;
-            accent-color: var(--primary);
-        }
-
-        .checklist-item label {
-            flex: 1;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .checklist-item.completed label {
-            text-decoration: line-through;
-            color: var(--text-medium);
-            opacity: 0.7;
-        }
-
         /* Stats Card */
         .stats-card {
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
@@ -171,14 +217,14 @@
 
         .stats-card h2 {
             color: white;
-            border-color: rgba(255,255,255,0.3);
+            border-color: rgba(255, 255, 255, 0.3);
         }
 
         .stat-item {
             display: flex;
             justify-content: space-between;
             padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .stat-item:last-child {
@@ -190,43 +236,7 @@
             font-weight: bold;
         }
 
-        /* View Tabs */
-        .view-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--border);
-        }
-
-        .view-tab {
-            padding: 12px 24px;
-            background: transparent;
-            border: none;
-            border-bottom: 3px solid transparent;
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--text-medium);
-            transition: all 0.3s;
-        }
-
-        .view-tab.active {
-            color: var(--primary);
-            border-bottom-color: var(--primary);
-        }
-
-        .view-tab:hover {
-            color: var(--primary);
-        }
-
-        .view-content {
-            display: none;
-        }
-
-        .view-content.active {
-            display: block;
-        }
-
-        /* Table Styles */
+        /* Table */
         .table-container {
             overflow-x: auto;
         }
@@ -234,7 +244,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 1400px;
+            min-width: 1600px;
         }
 
         th {
@@ -265,11 +275,30 @@
             display: inline-block;
         }
 
-        .status-scheduled { background: #dbeafe; color: #1e40af; }
-        .status-waiting { background: #fef3c7; color: #92400e; }
-        .status-checked { background: #ddd6fe; color: #5b21b6; }
-        .status-completed { background: #d1fae5; color: #065f46; }
-        .status-cancelled { background: #fee2e2; color: #991b1b; }
+        .status-scheduled {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-waiting {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-checked {
+            background: #ddd6fe;
+            color: #5b21b6;
+        }
+
+        .status-completed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-cancelled {
+            background: #fee2e2;
+            color: #991b1b;
+        }
 
         .action-btn {
             padding: 6px 12px;
@@ -285,120 +314,6 @@
             transform: scale(1.05);
         }
 
-        /* Calendar View */
-        .calendar-grid {
-            display: grid;
-            gap: 20px;
-        }
-
-        .calendar-day {
-            background: var(--bg-light);
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 4px solid var(--primary);
-        }
-
-        .calendar-day h3 {
-            color: var(--primary);
-            margin-bottom: 15px;
-        }
-
-        .calendar-appointment {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .calendar-appointment:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        /* Doctor View */
-        .doctor-group {
-            margin-bottom: 30px;
-        }
-
-        .doctor-header {
-            background: var(--primary);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 10px 10px 0 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .doctor-appointments {
-            background: var(--bg-light);
-            padding: 20px;
-            border-radius: 0 0 10px 10px;
-        }
-
-        /* Kanban Board */
-        .kanban-board {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .kanban-column {
-            background: var(--bg-light);
-            padding: 15px;
-            border-radius: 10px;
-        }
-
-        .kanban-column h3 {
-            color: var(--text-dark);
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--border);
-        }
-
-        .kanban-card {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .kanban-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-        /* Patient History */
-        .patient-search {
-            margin-bottom: 20px;
-        }
-
-        .patient-search input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            font-size: 1em;
-        }
-
-        .patient-search input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .patient-history-item {
-            background: var(--bg-light);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            border-left: 4px solid var(--primary);
-        }
-
         /* Modal */
         .modal {
             display: none;
@@ -407,7 +322,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             justify-content: center;
             align-items: center;
             z-index: 1000;
@@ -464,36 +379,8 @@
             gap: 20px;
         }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
         .form-group.full-width {
             grid-column: 1 / -1;
-        }
-
-        .form-group label {
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--text-dark);
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            padding: 12px;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            font-size: 1em;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary);
         }
 
         .form-group textarea {
@@ -540,41 +427,64 @@
                 width: 100%;
                 justify-content: center;
             }
-
-            .view-tabs {
-                overflow-x: auto;
-            }
         }
     </style>
 </head>
+
 <body>
-    <div class="dashboard">
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-card">
+            <h1>🩺 Doctor Login</h1>
+            <p>Welcome to Appointment Management System</p>
+            <form id="loginForm" onsubmit="app.login(event)">
+                <div class="form-group">
+                    <label>👨‍⚕️ Select Doctor</label>
+                    <select id="doctorSelect" required>
+                        <option value="">Choose your name</option>
+                        <option value="Dr. Patel">Dr. Patel</option>
+                        <option value="Dr. Kumar">Dr. Kumar</option>
+                        <option value="Dr. Sharma">Dr. Sharma</option>
+                        <option value="Dr. Singh">Dr. Singh</option>
+                        <option value="Dr. Reddy">Dr. Reddy</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>🔐 Doctor ID</label>
+                    <input type="text" id="doctorId" required placeholder="Enter your Doctor ID">
+                </div>
+                <button type="submit" class="btn btn-primary">Login to Dashboard</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="dashboard">
         <!-- Header -->
         <div class="dashboard-header">
             <div>
-                <h1>🩺 Doctor Appointment Management Dashboard</h1>
-                <p style="color: var(--text-medium); margin-top: 5px;">Centralized workspace to manage appointments and patient consultations</p>
+                <h1>🩺 Appointment Management Dashboard</h1>
+                <p style="color: var(--text-medium); margin-top: 5px;">Manage your appointments and patient
+                    consultations</p>
             </div>
-            <div class="header-actions">
-                <button class="btn btn-primary" onclick="dashboard.openAppointmentModal()">➕ New Appointment</button>
-                <button class="btn btn-secondary" onclick="dashboard.exportData()">📥 Export Data</button>
+            <div class="user-info">
+                <div class="user-badge" id="currentDoctor"></div>
+                <button class="btn btn-danger" onclick="app.logout()">Logout</button>
             </div>
+        </div>
+
+        <div class="header-actions" style="margin-bottom: 25px; padding: 0 5px;">
+            <button class="btn btn-primary" onclick="app.openAppointmentModal()">➕ New Appointment</button>
+            <button class="btn btn-secondary" onclick="app.exportData()">📥 Export Data</button>
         </div>
 
         <!-- Main Grid -->
         <div class="main-grid">
             <!-- Sidebar -->
             <aside>
-                <!-- Daily Checklist -->
-                <div class="card">
-                    <h2>✅ Daily Task Checklist</h2>
-                    <div class="checklist" id="checklist"></div>
-                    <button class="btn btn-secondary" style="width: 100%; margin-top: 15px;" onclick="dashboard.resetChecklist()">Reset Checklist</button>
-                </div>
-
                 <!-- Statistics -->
                 <div class="card stats-card">
-                    <h2>📊 Statistics</h2>
+                    <h2>📊 My Statistics</h2>
                     <div class="stat-item">
                         <span>Total Appointments:</span>
                         <span class="stat-value" id="totalAppts">0</span>
@@ -600,21 +510,23 @@
                         <span class="stat-value" id="cancelledAppts">0</span>
                     </div>
                 </div>
+
+                <!-- Quick Actions -->
+                <div class="card">
+                    <h2>⚡ Quick Actions</h2>
+                    <button class="btn btn-success" style="width: 100%; margin-bottom: 10px;"
+                        onclick="app.filterByStatus('Waiting')">View Waiting Patients</button>
+                    <button class="btn btn-primary" style="width: 100%; margin-bottom: 10px;"
+                        onclick="app.filterByToday()">Today's Appointments</button>
+                    <button class="btn btn-secondary" style="width: 100%;" onclick="app.clearFilters()">Clear
+                        Filters</button>
+                </div>
             </aside>
 
             <!-- Main Content -->
             <main>
                 <div class="card">
-                    <h2>🗂 Appointment Tracker</h2>
-                    
-                    <!-- View Tabs -->
-                    <div class="view-tabs">
-                        <button class="view-tab active" onclick="dashboard.switchView('table')">📋 Table View</button>
-                        <button class="view-tab" onclick="dashboard.switchView('calendar')">📅 Calendar View</button>
-                        <button class="view-tab" onclick="dashboard.switchView('doctor')">👨‍⚕️ Doctor View</button>
-                        <button class="view-tab" onclick="dashboard.switchView('kanban')">📊 Status Board</button>
-                        <button class="view-tab" onclick="dashboard.switchView('history')">📜 Patient History</button>
-                    </div>
+                    <h2>🗂 My Appointments</h2>
 
                     <!-- Table View -->
                     <div id="tableView" class="view-content active">
@@ -622,18 +534,15 @@
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>🏷️ Task Name</th>
-                                        <th>👨‍⚕️ Doctor</th>
                                         <th>📆 Date</th>
                                         <th>🧾 Patient ID</th>
                                         <th>📋 Visit Type</th>
                                         <th>⚧ Gender</th>
-                                        <th>💻 Mode</th>
                                         <th>📞 Contact</th>
                                         <th>🏠 Address</th>
+                                        <th>💻 Mode</th>
                                         <th>💬 Chief Complaint</th>
                                         <th>📅 Status</th>
-                                        <th>🩷 Doctor Preference</th>
                                         <th>🧾 Diagnosis</th>
                                         <th>💊 Medicines</th>
                                         <th>📆 Next Visit</th>
@@ -643,29 +552,6 @@
                                 <tbody id="appointmentsTable"></tbody>
                             </table>
                         </div>
-                    </div>
-
-                    <!-- Calendar View -->
-                    <div id="calendarView" class="view-content">
-                        <div class="calendar-grid" id="calendarGrid"></div>
-                    </div>
-
-                    <!-- Doctor View -->
-                    <div id="doctorView" class="view-content">
-                        <div id="doctorGrid"></div>
-                    </div>
-
-                    <!-- Kanban Board -->
-                    <div id="kanbanView" class="view-content">
-                        <div class="kanban-board" id="kanbanBoard"></div>
-                    </div>
-
-                    <!-- Patient History -->
-                    <div id="historyView" class="view-content">
-                        <div class="patient-search">
-                            <input type="text" id="patientSearchInput" placeholder="🔍 Search by Patient ID or Name..." oninput="dashboard.searchPatient()">
-                        </div>
-                        <div id="patientHistoryContent"></div>
                     </div>
                 </div>
             </main>
@@ -677,26 +563,11 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2>➕ New Appointment</h2>
-                <button class="close-btn" onclick="dashboard.closeModal()">&times;</button>
+                <button class="close-btn" onclick="app.closeModal()">&times;</button>
             </div>
             <div class="modal-body">
-                <form id="appointmentForm" onsubmit="dashboard.saveAppointment(event)">
+                <form id="appointmentForm" onsubmit="app.saveAppointment(event)">
                     <div class="form-grid">
-                        <div class="form-group">
-                            <label>🏷️ Task Name *</label>
-                            <input type="text" id="taskName" required placeholder="Schedule Appointment">
-                        </div>
-                        <div class="form-group">
-                            <label>👨‍⚕️ Doctor *</label>
-                            <select id="doctor" required>
-                                <option value="">Select Doctor</option>
-                                <option value="Dr. Patel">Dr. Patel</option>
-                                <option value="Dr. Kumar">Dr. Kumar</option>
-                                <option value="Dr. Sharma">Dr. Sharma</option>
-                                <option value="Dr. Singh">Dr. Singh</option>
-                                <option value="Dr. Reddy">Dr. Reddy</option>
-                            </select>
-                        </div>
                         <div class="form-group">
                             <label>📆 Date *</label>
                             <input type="date" id="date" required>
@@ -720,23 +591,19 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label>📞 Contact *</label>
+                            <input type="tel" id="contact" required placeholder="9876543210" pattern="[0-9]{10}">
+                        </div>
+                        <div class="form-group">
+                            <label>🏠 Address *</label>
+                            <input type="text" id="address" required placeholder="Mumbai">
+                        </div>
+                        <div class="form-group">
                             <label>💻 Mode *</label>
                             <div class="radio-group">
                                 <label><input type="radio" name="mode" value="Direct" required> Direct</label>
                                 <label><input type="radio" name="mode" value="Online"> Online</label>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label>📞 Contact *</label>
-                            <input type="tel" id="contact" required placeholder="9876543210" pattern="[0-9]{10}">
-                        </div>
-                        <div class="form-group full-width">
-                            <label>🏠 Address *</label>
-                            <input type="text" id="address" required placeholder="Mumbai">
-                        </div>
-                        <div class="form-group full-width">
-                            <label>💬 Chief Complaint *</label>
-                            <textarea id="complaint" required placeholder="Fever"></textarea>
                         </div>
                         <div class="form-group">
                             <label>📅 Status *</label>
@@ -748,118 +615,130 @@
                                 <option value="Cancelled">Cancelled</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label>🩷 Doctor Preference</label>
-                            <input type="text" id="doctorPref" placeholder="Optional">
+                        <div class="form-group full-width">
+                            <label>💬 Chief Complaint *</label>
+                            <textarea id="complaint" required placeholder="Fever, headache, etc."></textarea>
                         </div>
                         <div class="form-group full-width">
                             <label>🧾 Diagnosis</label>
-                            <textarea id="diagnosis" placeholder="Enter diagnosis"></textarea>
+                            <textarea id="diagnosis" placeholder="Enter diagnosis after consultation"></textarea>
                         </div>
                         <div class="form-group full-width">
                             <label>💊 Prescribed Medicines</label>
-                            <textarea id="medicines" placeholder="Enter medicines"></textarea>
+                            <textarea id="medicines" placeholder="Enter prescribed medicines"></textarea>
                         </div>
                         <div class="form-group">
                             <label>📆 Next Visit</label>
                             <input type="date" id="nextVisit">
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">Save Appointment</button>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">
+                        Save Appointment
+                    </button>
                 </form>
             </div>
         </div>
     </div>
 
     <script>
-        const dashboard = {
+        const app = {
+            currentDoctor: null,
             appointments: [],
-            checklist: {},
-            currentView: 'table',
+            editingId: null,
+            filterStatus: null,
+            filterToday: false,
 
             init() {
                 this.loadData();
-                this.renderChecklist();
+                this.checkLogin();
+            },
+
+            checkLogin() {
+                const loggedIn = sessionStorage.getItem('loggedInDoctor');
+                if (loggedIn) {
+                    this.currentDoctor = loggedIn;
+                    this.showDashboard();
+                } else {
+                    document.getElementById('loginScreen').style.display = 'flex';
+                }
+            },
+
+            login(e) {
+                e.preventDefault();
+                const doctor = document.getElementById('doctorSelect').value;
+                const doctorId = document.getElementById('doctorId').value;
+
+                if (doctor && doctorId) {
+                    this.currentDoctor = doctor;
+                    sessionStorage.setItem('loggedInDoctor', doctor);
+                    sessionStorage.setItem('doctorId', doctorId);
+                    this.showDashboard();
+                }
+            },
+
+            logout() {
+                if (confirm('Are you sure you want to logout?')) {
+                    sessionStorage.removeItem('loggedInDoctor');
+                    sessionStorage.removeItem('doctorId');
+                    this.currentDoctor = null;
+                    document.getElementById('loginScreen').style.display = 'flex';
+                    document.getElementById('dashboard').classList.remove('active');
+                    document.getElementById('loginForm').reset();
+                }
+            },
+
+            showDashboard() {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('dashboard').classList.add('active');
+                document.getElementById('currentDoctor').textContent = this.currentDoctor;
+                document.getElementById('date').value = new Date().toISOString().split('T')[0];
                 this.renderAppointments();
                 this.updateStats();
-                document.getElementById('date').value = new Date().toISOString().split('T')[0];
             },
 
             loadData() {
-                const stored = localStorage.getItem('doctorDashboard');
+                const stored = sessionStorage.getItem('appointments');
                 if (stored) {
-                    const data = JSON.parse(stored);
-                    this.appointments = data.appointments || [];
-                    this.checklist = data.checklist || {};
+                    this.appointments = JSON.parse(stored);
                 }
             },
 
             saveData() {
-                localStorage.setItem('doctorDashboard', JSON.stringify({
-                    appointments: this.appointments,
-                    checklist: this.checklist
-                }));
+                sessionStorage.setItem('appointments', JSON.stringify(this.appointments));
             },
 
-            renderChecklist() {
-                const tasks = [
-                    'Doctor logs into system',
-                    'Check doctor availability for the day',
-                    'Register / verify patient ID',
-                    'Identify visit type → New / Follow-up',
-                    'Confirm patient gender → Male / Female',
-                    'Record contact number and address',
-                    'Select mode of consultation → Direct / Online',
-                    'Schedule appointment (add to database)',
-                    'Update status → Scheduled / Waiting / Checked / Completed / Cancelled',
-                    'Note doctor preference (if any)',
-                    'Record chief complaint for visit',
-                    'Add follow-up actions or notes',
-                    'Update patient status',
-                    'Patient can choose between doctors'
-                ];
+            getMyAppointments() {
+                let filtered = this.appointments.filter(a => a.doctor === this.currentDoctor);
 
-                const html = tasks.map((task, i) => `
-                    <div class="checklist-item ${this.checklist[i] ? 'completed' : ''}">
-                        <input type="checkbox" id="check${i}" ${this.checklist[i] ? 'checked' : ''} 
-                               onchange="dashboard.toggleCheck(${i})">
-                        <label for="check${i}">${task}</label>
-                    </div>
-                `).join('');
-
-                document.getElementById('checklist').innerHTML = html;
-            },
-
-            toggleCheck(index) {
-                this.checklist[index] = !this.checklist[index];
-                this.saveData();
-                this.renderChecklist();
-            },
-
-            resetChecklist() {
-                if (confirm('Reset all checklist items?')) {
-                    this.checklist = {};
-                    this.saveData();
-                    this.renderChecklist();
+                if (this.filterStatus) {
+                    filtered = filtered.filter(a => a.status === this.filterStatus);
                 }
+
+                if (this.filterToday) {
+                    const today = new Date().toISOString().split('T')[0];
+                    filtered = filtered.filter(a => a.date === today);
+                }
+
+                return filtered;
             },
 
             openAppointmentModal() {
+                this.editingId = null;
                 document.getElementById('appointmentModal').classList.add('active');
             },
 
             closeModal() {
                 document.getElementById('appointmentModal').classList.remove('active');
                 document.getElementById('appointmentForm').reset();
+                this.editingId = null;
             },
 
             saveAppointment(e) {
                 e.preventDefault();
-                
+
                 const appointment = {
-                    id: Date.now().toString(),
-                    taskName: document.getElementById('taskName').value,
-                    doctor: document.getElementById('doctor').value,
+                    id: this.editingId || Date.now().toString(),
+                    doctor: this.currentDoctor,
                     date: document.getElementById('date').value,
                     patientId: document.getElementById('patientId').value,
                     visitType: document.querySelector('input[name="visitType"]:checked').value,
@@ -869,13 +748,18 @@
                     address: document.getElementById('address').value,
                     complaint: document.getElementById('complaint').value,
                     status: document.getElementById('status').value,
-                    doctorPref: document.getElementById('doctorPref').value,
                     diagnosis: document.getElementById('diagnosis').value,
                     medicines: document.getElementById('medicines').value,
                     nextVisit: document.getElementById('nextVisit').value
                 };
 
-                this.appointments.push(appointment);
+                if (this.editingId) {
+                    const index = this.appointments.findIndex(a => a.id === this.editingId);
+                    this.appointments[index] = appointment;
+                } else {
+                    this.appointments.push(appointment);
+                }
+
                 this.saveData();
                 this.closeModal();
                 this.renderAppointments();
@@ -896,8 +780,7 @@
                 const apt = this.appointments.find(a => a.id === id);
                 if (!apt) return;
 
-                document.getElementById('taskName').value = apt.taskName;
-                document.getElementById('doctor').value = apt.doctor;
+                this.editingId = id;
                 document.getElementById('date').value = apt.date;
                 document.getElementById('patientId').value = apt.patientId;
                 document.querySelector(`input[name="visitType"][value="${apt.visitType}"]`).checked = true;
@@ -907,16 +790,94 @@
                 document.getElementById('address').value = apt.address;
                 document.getElementById('complaint').value = apt.complaint;
                 document.getElementById('status').value = apt.status;
-                document.getElementById('doctorPref').value = apt.doctorPref;
-                document.getElementById('diagnosis').value = apt.diagnosis;
-                document.getElementById('medicines').value = apt.medicines;
-                document.getElementById('nextVisit').value = apt.nextVisit;
+                document.getElementById('diagnosis').value = apt.diagnosis || '';
+                document.getElementById('medicines').value = apt.medicines || '';
+                document.getElementById('nextVisit').value = apt.nextVisit || '';
 
-                this.deleteAppointment(id);
                 this.openAppointmentModal();
             },
 
             renderAppointments() {
-                this.renderTableView();
-                this.renderCalendarView();
-                this.renderDoctorView();
+                const tbody = document.getElementById('appointmentsTable');
+                const myAppts = this.getMyAppointments().sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                tbody.innerHTML = myAppts.map(apt => `
+                    <tr>
+                        <td>${apt.date}</td>
+                        <td>${apt.patientId}</td>
+                        <td>${apt.visitType}</td>
+                        <td>${apt.gender}</td>
+                        <td>${apt.contact}</td>
+                        <td>${apt.address}</td>
+                        <td>${apt.mode}</td>
+                        <td>${apt.complaint}</td>
+                        <td><span class="status-badge status-${apt.status.toLowerCase()}">${apt.status}</span></td>
+                        <td>${apt.diagnosis || '-'}</td>
+                        <td>${apt.medicines || '-'}</td>
+                        <td>${apt.nextVisit || '-'}</td>
+                        <td>
+                            <button class="action-btn btn-primary" onclick="app.editAppointment('${apt.id}')">Edit</button>
+                            <button class="action-btn btn-danger" onclick="app.deleteAppointment('${apt.id}')">Delete</button>
+                        </td>
+                    </tr>
+                `).join('');
+
+                if (myAppts.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="13" style="text-align: center; padding: 40px;">No appointments found</td></tr>';
+                }
+            },
+
+            updateStats() {
+                const myAppts = this.appointments.filter(a => a.doctor === this.currentDoctor);
+                const totalAppts = myAppts.length;
+                const scheduledAppts = myAppts.filter(a => a.status === 'Scheduled').length;
+                const waitingAppts = myAppts.filter(a => a.status === 'Waiting').length;
+                const checkedAppts = myAppts.filter(a => a.status === 'Checked').length;
+                const completedAppts = myAppts.filter(a => a.status === 'Completed').length;
+                const cancelledAppts = myAppts.filter(a => a.status === 'Cancelled').length;
+
+                document.getElementById('totalAppts').textContent = totalAppts;
+                document.getElementById('scheduledAppts').textContent = scheduledAppts;
+                document.getElementById('waitingAppts').textContent = waitingAppts;
+                document.getElementById('checkedAppts').textContent = checkedAppts;
+                document.getElementById('completedAppts').textContent = completedAppts;
+                document.getElementById('cancelledAppts').textContent = cancelledAppts;
+            },
+
+            filterByStatus(status) {
+                this.filterStatus = status;
+                this.filterToday = false;
+                this.renderAppointments();
+            },
+
+            filterByToday() {
+                this.filterToday = true;
+                this.filterStatus = null;
+                this.renderAppointments();
+            },
+
+            clearFilters() {
+                this.filterStatus = null;
+                this.filterToday = false;
+                this.renderAppointments();
+            },
+
+            exportData() {
+                const myAppts = this.getMyAppointments();
+                const data = JSON.stringify(myAppts, null, 2);
+                const blob = new Blob([data], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${this.currentDoctor}-appointments-${new Date().toISOString().split('T')[0]}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+                alert('✅ Data exported successfully!');
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => app.init());
+    </script>
+</body>
+
+</html>
