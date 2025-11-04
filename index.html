@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg-light: #f8fafc;
+            --text-dark: #1e293b;
+            --text-medium: #64748b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+        }
+
+        /* ========================================
+           ROLE SELECTION PAGE
+        ======================================== */
+        .role-selection {
+            text-align: center;
+            background: white;
+            padding: 60px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .role-selection h1 {
+            color: var(--primary);
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .role-selection p {
+            color: var(--text-medium);
+            font-size: 1.2em;
+            margin-bottom: 40px;
+        }
+
+        .role-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .role-card {
+            background: linear-gradient(135deg, var(--bg-light), white);
+            padding: 40px 30px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .role-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.3);
+            border-color: var(--primary);
+        }
+
+        .role-card .icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .role-card h2 {
+            color: var(--text-dark);
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .role-card p {
+            color: var(--text-medium);
+            font-size: 1em;
+            margin: 0;
+        }
+
+        /* ========================================
+           LOGIN PAGE
+        ======================================== */
+        .login-container {
+            background: white;
+            padding: 50px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 450px;
+            margin: 0 auto;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .login-header .icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+
+        .login-header h1 {
+            color: var(--primary);
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            color: var(--text-medium);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .back-btn {
+            background: var(--text-medium);
+            margin-top: 15px;
+        }
+
+        .back-btn:hover {
+            background: var(--text-dark);
+        }
+
+        /* ========================================
+           DASHBOARD
+        ======================================== */
+        .dashboard {
+            background: var(--bg-light);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .dashboard-header {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-header h1 {
+            color: var(--primary);
+            font-size: 2em;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logout-btn {
+            padding: 10px 20px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 10px;
+        }
+
+        /* Checklist */
+        .checklist-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            background: var(--bg-light);
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checklist-item label {
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .checklist-item.completed label {
+            text-decoration: line-through;
+            color: var(--text-medium);
+        }
+
+        /* Stats */
+        .stats-card {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .stats-card h2 {
+            color: white;
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            padding: 15px 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 15px 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tbody tr:hover {
+            background: var(--bg-light);
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .status-scheduled { background: #dbeafe; color: #1e40af; }
+        .status-waiting { background: #fef3c7; color: #92400e; }
+        .status-completed { background: #d1fae5; color: #065f46; }
+
+        .action-btn {
+            padding: 8px 16px;
+            margin: 2px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 25px;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 2em;
+            cursor: pointer;
+            color: var(--text-medium);
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Patient Dashboard */
+        .patient-dashboard {
+            text-align: center;
+        }
+
+        .patient-dashboard .queue-info {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .queue-info h2 {
+            color: white;
+            border: none;
+            font-size: 2em;
+        }
+
+        .queue-number {
+            font-size: 5em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .appointment-card {
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        @media (max-width: 968px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .role-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Role Selection Page -->
+        <div id="roleSelection" class="role-selection">
+            <h1>🏥 Hospital Management System</h1>
+            <p>Please select your role to continue</p>
+            <div class="role-buttons">
+                <div class="role-card" onclick="app.showLogin('doctor')">
+                    <div class="icon">👨‍⚕️</div>
+                    <h2>Doctor</h2>
+                    <p>Manage appointments and patients</p>
+                </div>
+                <div class="role-card" onclick="app.showLogin('patient')">
+                    <div class="icon">🧑‍🤝‍🧑</div>
+                    <h2>Patient</h2>
+                    <p>View your appointments</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Page -->
+        <div id="loginPage" class="login-container hidden">
+            <div class="login-header">
+                <div class="icon" id="loginIcon">👨‍⚕️</div>
+                <h1 id="loginTitle">Doctor Login</h1>
+                <p id="loginSubtitle">Enter your credentials to continue</p>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required placeholder="Enter username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required placeholder="Enter password">
+                </div>
+                <button type="submit" class="btn">Login</button>
+                <button type="button" class="btn back-btn" onclick="app.showRoleSelection()">Back</button>
+            </form>
+        </div>
+
+        <!-- Doctor Dashboard -->
+        <div id="doctorDashboard" class="dashboard hidden">
+            <div class="dashboard-header">
+                <div>
+                    <h1>🩺 Doctor Dashboard</h1>
+                    <p id="doctorName"></p>
+                </div>
+                <div class="user-info">
+                    <button class="btn btn-primary" onclick="app.openAppointmentModal()">➕ New Appointment</button>
+                    <button class="logout-btn" onclick="app.logout()">Logout</button>
+                </div>
+            </div>
+
+            <div class="main-grid">
+                <aside>
+                    <!-- Daily Checklist -->
+                    <div class="card">
+                        <h2>✅ Daily Checklist</h2>
+                        <div id="checklist"></div>
+                        <button class="btn" style="margin-top: 15px;" onclick="app.resetChecklist()">Reset</button>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="card stats-card">
+                        <h2>📊 Statistics</h2>
+                        <div class="stat-item">
+                            <span>Total:</span>
+                            <span class="stat-value" id="totalAppts">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>Scheduled:</span>
+                            <span class="stat-value" id="scheduledAppts">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>Waiting:</span>
+                            <span class="stat-value" id="waitingAppts">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>Completed:</span>
+                            <span class="stat-value" id="completedAppts">0</span>
+                        </div>
+                    </div>
+                </aside>
+
+                <main>
+                    <div class="card">
+                        <h2>🗂 Appointment Tracker</h2>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Patient ID</th>
+                                        <th>Patient Name</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                        <th>Visit Type</th>
+                                        <th>Gender</th>
+                                        <th>Mode</th>
+                                        <th>Contact</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="appointmentsTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <!-- Patient Dashboard -->
+        <div id="patientDashboard" class="dashboard hidden">
+            <div class="dashboard-header">
+                <div>
+                    <h1>🧑‍🤝‍🧑 Patient Dashboard</h1>
+                    <p id="patientName"></p>
+                </div>
+                <div class="user-info">
+                    <button class="btn btn-primary" onclick="app.bookAppointment()">📅 Book Appointment</button>
+                    <button class="logout-btn" onclick="app.logout()">Logout</button>
+                </div>
+            </div>
+
+            <div class="patient-dashboard">
+                <div class="card queue-info">
+                    <h2>Current Queue Status</h2>
+                    <div class="queue-number" id="queueNumber">-</div>
+                    <p style="font-size: 1.2em;">Your Token Number</p>
+                </div>
+
+                <div class="card">
+                    <h2>📋 My Appointments</h2>
+                    <div id="patientAppointments"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Appointment Modal -->
+        <div id="appointmentModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>➕ New Appointment</h2>
+                    <button class="close-btn" onclick="app.closeModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="appointmentForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Patient ID *</label>
+                                <input type="text" id="patientId" required placeholder="P-1024">
+                            </div>
+                            <div class="form-group">
+                                <label>Patient Name *</label>
+                                <input type="text" id="patientNameInput" required placeholder="Enter name">
+                            </div>
+                            <div class="form-group">
+                                <label>Date *</label>
+                                <input type="date" id="apptDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Time *</label>
+                                <input type="time" id="apptTime" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Visit Type *</label>
+                                <select id="visitType" required>
+                                    <option value="New">New</option>
+                                    <option value="Follow-up">Follow-up</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Gender *</label>
+                                <select id="gender" required>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Mode *</label>
+                                <select id="mode" required>
+                                    <option value="Direct">Direct</option>
+                                    <option value="Online">Online</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Contact *</label>
+                                <input type="tel" id="contact" required placeholder="9876543210" pattern="[0-9]{10}">
+                            </div>
+                            <div class="form-group" style="grid-column: 1/-1;">
+                                <label>Address *</label>
+                                <input type="text" id="address" required placeholder="Enter address">
+                            </div>
+                            <div class="form-group" style="grid-column: 1/-1;">
+                                <label>Chief Complaint *</label>
+                                <textarea id="complaint" required style="width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 8px; min-height: 80px;"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Doctor Preference</label>
+                                <select id="doctorPref">
+                                    <option value="">Select Doctor</option>
+                                    <option value="Dr. Patel">Dr. Patel</option>
+                                    <option value="Dr. Kumar">Dr. Kumar</option>
+                                    <option value="Dr. Sharma">Dr. Sharma</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Status *</label>
+                                <select id="status" required>
+                                    <option value="Scheduled">Scheduled</option>
+                                    <option value="Waiting">Waiting</option>
+                                    <option value="Completed">Completed</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="grid-column: 1/-1;">
+                                <label>Diagnosis</label>
+                                <textarea id="diagnosis" style="width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 8px; min-height: 60px;"></textarea>
+                            </div>
+                            <div class="form-group" style="grid-column: 1/-1;">
+                                <label>Prescribed Medicines</label>
+                                <textarea id="medicines" style="width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 8px; min-height: 60px;"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Next Visit</label>
+                                <input type="date" id="nextVisit">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn" style="margin-top: 20px;">Save Appointment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const app = {
+            currentUser: null,
+            currentRole: null,
+            appointments: [],
+            checklist: {},
+
+            init() {
+                this.loadData();
+                this.showRoleSelection();
+            },
+
+            loadData() {
+                const stored = localStorage.getItem('hospitalData');
+                if (stored) {
+                    const data = JSON.parse(stored);
+                    this.appointments = data.appointments || [];
+                    this.checklist = data.checklist || {};
+                }
+            },
+
+            saveData() {
+                localStorage.setItem('hospitalData', JSON.stringify({
+                    appointments: this.appointments,
+                    checklist: this.checklist
+                }));
+            },
+
+            showRoleSelection() {
+                document.getElementById('roleSelection').classList.remove('hidden');
+                document.getElementById('loginPage').classList.add('hidden');
+                document.getElementById('doctorDashboard').classList.add('hidden');
+                document.getElementById('patientDashboard').classList.add('hidden');
+            },
+
+            showLogin(role) {
+                this.currentRole = role;
+                document.getElementById('roleSelection').classList.add('hidden');
+                document.getElementById('loginPage').classList.remove('hidden');
+
+                if (role === 'doctor') {
+                    document.getElementById('loginIcon').textContent = '👨‍⚕️';
+                    document.getElementById('loginTitle').textContent = 'Doctor Login';
+                    document.getElementById('loginSubtitle').textContent = 'Enter your credentials to continue';
+                } else {
+                    document.getElementById('loginIcon').textContent = '🧑‍🤝‍🧑';
+                    document.getElementById('loginTitle').textContent = 'Patient Login';
+                    document.getElementById('loginSubtitle').textContent = 'Enter your credentials to continue';
+                }
+            },
+
+            login(e) {
+                e.preventDefault();
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+
+                // Simple validation (in real app, use proper authentication)
+                if (username && password) {
+                    this.currentUser = username;
+                    document.getElementById('loginPage').classList.add('hidden');
+
+                    if (this.currentRole === 'doctor') {
+                        this.showDoctorDashboard();
+                    } else {
+                        this.showPatientDashboard();
+                    }
+                }
+            },
+
+            showDoctorDashboard() {
+                document.getElementById('doctorDashboard').classList.remove('hidden');
+                document.getElementById('doctorName').textContent = `Welcome, ${this.currentUser}`;
+                this.renderChecklist();
+                this.renderAppointments();
+                this.updateStats();
+            },
+
+            showPatientDashboard() {
+                document.getElementById('patientDashboard').classList.remove('hidden');
+                document.getElementById('patientName').textContent = `Welcome, ${this.currentUser}`;
+                this.renderPatientAppointments();
+            },
+
+            renderChecklist() {
+                const tasks = [
+                    'Doctor logs into system',
+                    'Check doctor availability for the day',
+                    'Register / verify patient ID',
+                    'Identify visit type (New/Follow-up)',
+                    'Confirm patient gender',
+                    'Record contact number and address',
+                    'Select mode of consultation',
+                    'Schedule appointment',
+                    'Update status',
+                    'Note doctor preference',
+                    'Record chief complaint',
+                    'Add follow-up actions'
+                ];
+
+                const html = tasks.map((task, i) => `
+                    <div class="checklist-item ${this.checklist[i] ? 'completed' : ''}">
+                        <input type="checkbox" id="check${i}" ${this.checklist[i] ? 'checked' : ''} 
+                               onchange="app.toggleCheck(${i})">
+                        <label for="check${i}">${task}</label>
+                    </div>
+                `).join('');
+
+                document.getElementById('checklist').innerHTML = html;
+            },
+
+            toggleCheck(index) {
+                this.checklist[index] = !this.checklist[index];
+                this.saveData();
+                this.renderChecklist();
+            },
+
+            resetChecklist() {
+                this.checklist = {};
+                this.saveData();
+                this.renderChecklist();
+            },
+
+            renderAppointments() {
+                const tbody = document.getElementById('appointmentsTable');
+                if (this.appointments.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 40px;">No appointments yet</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = this.appointments.map(apt => `
+                    <tr>
+                        <td><strong>${apt.patientId}</strong></td>
+                        <td>${apt.patientName}</td>
+                        <td>${apt.date}</td>
+                        <td>${apt.time}</td>
+                        <td>${apt.visitType}</td>
+                        <td>${apt.gender}</td>
+                        <td>${apt.mode}</td>
+                        <td>${apt.contact}</td>
+                        <td><span class="status-badge status-${apt.status.toLowerCase()}">${apt.status}</span></td>
+                        <td>
+                            <button class="action-btn btn-primary" onclick="app.viewDetails('${apt.id}')">View</button>
+                            <button class="action-btn btn-danger" onclick="app.deleteAppointment('${apt.id}')">Delete</button>
+                        </td>
+                    </tr>
+                `).join('');
+            },
+
+            renderPatientAppointments() {
+                const userAppts = this.appointments.filter(a => a.patientId === this.currentUser);
+                const container = document.getElementById('patientAppointments');
+
+                if (userAppts.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; padding: 40px; color: var(--text-medium);">No appointments found</p>';
+                    document.getElementById('queueNumber').textContent = '-';
+                    return;
+                }
+
+                const waiting = userAppts.find(a => a.status === 'Waiting');
+                document.getElementById('queueNumber').textContent = waiting ? waiting.patientId : '-';
+
+                container.innerHTML = userAppts.map(apt => `
+                    <div class="appointment-card">
+                        <h3>${apt.date} at ${apt.time}</h3>
+                        <p><strong>Doctor:</strong> ${apt.doctorPref || 'Not assigned'}</p>
+                        <p><strong>Visit Type:</strong> ${apt.visitType}</p>
+                        <p><strong>Mode:</strong> ${apt.mode}</p>
+                        <p><strong>Status:</strong> <span class="status-badge status-${apt.status.toLowerCase()}">${apt.status}</span></p>
+                        <p><strong>Chief Complaint:</strong> ${apt.complaint}</p>
+                    </div>
+                `).join('');
+            },
+
+            updateStats() {
+                const total = this.appointments.length;
+                const scheduled = this.appointments.filter(a => a.status === 'Scheduled').length;
+                const waiting = this.appointments.filter(a => a.status === 'Waiting').length;
+                const completed = this.appointments.filter(a => a.status === 'Completed').length;
+
+                document.getElementById('totalAppts').textContent = total;
+                document.getElementById('scheduledAppts').textContent = scheduled;
+                document.getElementById('waitingAppts').textContent = waiting;
+                document.getElementById('completedAppts').textContent = completed;
+            },
+
+            openAppointmentModal() {
+                document.getElementById('appointmentModal').classList.add('active');
+                document.getElementById('apptDate').value = new Date().toISOString().split('T')[0];
+            },
+
+            bookAppointment() {
+                this.openAppointmentModal();
+                document.getElementById('patientId').value = this.currentUser;
+                document.getElementById('patientId').readOnly = true;
+            },
+
+            closeModal() {
+                document.getElementById('appointmentModal').classList.remove('active');
